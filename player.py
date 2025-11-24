@@ -15,8 +15,17 @@ class Player:
 
         self.rect.center = self.screen_rect.center
 
-    def update(self):
-        pass
+    def check_events(self, events):
+        for event in events:
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_RIGHT:
+                    self.rect.x += self.settings.tile_size_px
+                if event.key == pygame.K_LEFT:
+                    self.rect.x -= self.settings.tile_size_px
+                if event.key == pygame.K_DOWN:
+                    self.rect.y += self.settings.tile_size_px
+                if event.key == pygame.K_UP:
+                    self.rect.y -= self.settings.tile_size_px
 
     def blitme(self):
         self.screen.blit(self.image, self.rect)

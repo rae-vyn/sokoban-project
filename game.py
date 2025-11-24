@@ -16,7 +16,9 @@ class Game:
 
     def run_game(self):
         while True:
-            for event in pygame.event.get():
+            events = pygame.event.get()
+            self.player.check_events(events)
+            for event in events:
                 if event.type == pygame.QUIT:
                     sys.exit()
 
