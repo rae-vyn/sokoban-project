@@ -1,5 +1,5 @@
 class Settings():
     def __init__(self):
         self.tile_size_px = 64
-        self.grid_size = 32
-        self.bg_color = (155, 155, 155)
+        self.grid_size = 16
+        self.bg_color = (200, 200, 200)
