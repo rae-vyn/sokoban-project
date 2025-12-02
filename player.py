@@ -1,31 +1,35 @@
 import pygame
-
+from pprint import pprint
+from entity import Entity, Wall, Blank, Box
 from settings import Settings
 
 # adapted from PCC chap. 14
-class Player:
-    def __init__(self, sk_game):
-        self.screen = sk_game.screen
-        self.screen_rect = sk_game.screen.get_rect()
-        self.settings = Settings()
-
-        self.image = pygame.image.load('images/gatito.png')
-        self.image = pygame.transform.scale(self.image, (self.settings.tile_size_px, self.settings.tile_size_px))
-        self.rect = self.image.get_rect()
-
-        self.rect.center = self.screen_rect.center
+class Player(Entity):
+    def __init__(self, sk_game, image_path, coord_x=0, coord_y=0, draw_x=0, draw_y = 0):
+        super().__init__(sk_game, image_path, coord_x, coord_y, draw_x, draw_y)
 
     def check_events(self, events):
         for event in events:
             if event.type == pygame.KEYDOWN:
+                move_x = 0
+                move_y = 0
                 if event.key == pygame.K_RIGHT:
-                    self.rect.x += self.settings.tile_size_px
-                if event.key == pygame.K_LEFT:
-                    self.rect.x -= self.settings.tile_size_px
+                    move_x = 1
+                elif event.key == pygame.K_LEFT:
+                    move_x = -1
                 if event.key == pygame.K_DOWN:
-                    self.rect.y += self.settings.tile_size_px
-                if event.key == pygame.K_UP:
-                    self.rect.y -= self.settings.tile_size_px
+                    move_y = 1
+                elif event.key == pygame.K_UP:
+                    move_y = -1
+                self.handle_collision(move_x, move_y)
 
-    def blitme(self):
-        self.screen.blit(self.image, self.rect)
+    def handle_collision(self, move_x, move_y):
+        move_attempt = self.sk_game.curr_level.entities[self.coord_y + move_y][self.coord_x + move_x]
+        # print(f"Colliding with ({type(move_attempt)})")
+        if type(move_attempt) == Blank:
+            self.move(move_x, move_y)
+        if type(move_attempt) == Box:
+            # check which side we're hitting the box on and move it
+            if move_attempt.can_move(move_x, move_y):
+                move_attempt.move(move_x, move_y)
+                self.move(move_x, move_y)
