@@ -2,6 +2,8 @@ import json
 from entity import Entity, Objective, Wall, Blank, Box
 from player import Player
 from math import floor
+
+
 class Level:
     def __init__(self, sk_game, name, order, map):
         self.sk_game = sk_game
@@ -15,12 +17,18 @@ class Level:
         self.load_map()
 
     def load_map(self):
+        self.entities = []
         for y in range(len(self.map)):
             row = []
             for x in range(len(self.map[y])):
                 char = self.map[y][x]
                 draw_x = self.offset_x
                 draw_y = self.offset_y
+                # x -> wall
+                # . -> blank space
+                # # -> box
+                # o -> objective (star)
+                # p -> player
                 if char == "x":
                     row.append(Wall(self.sk_game, 'images/brick.png', x, y, draw_x, draw_y))
                 elif char in ".":
@@ -36,21 +44,20 @@ class Level:
             self.entities.append(row)
 
     def blitme(self):
+        # Draw all the level's tiles
         for objective in self.objectives:
             objective.blitme()
         for row in self.entities:
             for entity in row:
                 entity.blitme()
 
-    def is_level_complete(self):
+    def is_level_complete(self): # are boxes over all the objectives?
         for objective in self.objectives:
             if type(self.entities[objective.coord_y][objective.coord_x]) != Box:
                 return False
         return True
 
 
-
-
 def parse_level(game, text: str) -> Level:
-    data: dict[str, str | list[str] | int] = json.loads(text)
+    data = json.loads(text)
     return Level(game, data["name"], data["order"], data["map"])

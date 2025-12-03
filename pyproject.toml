@@ -1,0 +1,6 @@
+[tool.black]
+line_length = 105
+
+[tool.basedpyright]
+typeCheckingMode = "basic"
+reportOptionalMemberAccess = false

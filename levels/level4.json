@@ -1,0 +1,13 @@
+{
+  "name": "Level 4",
+  "order": 4,
+  "map": [
+    "xxxxxx.",
+    "xo.o.x.",
+    "x.##..x",
+    "xo#p#.x",
+    "xx....x",
+    ".x...ox",
+    ".xxxxxx"
+  ]
+}

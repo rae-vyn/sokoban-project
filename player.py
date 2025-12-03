@@ -24,12 +24,14 @@ class Player(Entity):
                 self.handle_collision(move_x, move_y)
 
     def handle_collision(self, move_x, move_y):
+        if not self.sk_game.curr_level: # so type checking leaves me alone
+            return
+        # Check the grid to move the player
         move_attempt = self.sk_game.curr_level.entities[self.coord_y + move_y][self.coord_x + move_x]
-        # print(f"Colliding with ({type(move_attempt)})")
         if type(move_attempt) == Blank:
             self.move(move_x, move_y)
         if type(move_attempt) == Box:
-            # check which side we're hitting the box on and move it
+            # move the box in the same direction we move the character.
             if move_attempt.can_move(move_x, move_y):
                 move_attempt.move(move_x, move_y)
                 self.move(move_x, move_y)
